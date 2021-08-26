@@ -4,6 +4,7 @@
     <div class="sidefilter">
       <form class="toc-filter">
         <span class="glyphicon glyphicon-filter filter-icon"></span>
+        <span class="glyphicon glyphicon-remove clear-icon" id="toc_filter_clear"></span>
         <input type="text" id="toc_filter_input" placeholder="Enter here to filter..." onkeypress="if(event.keyCode==13) {return false;}">
       </form>
     </div>
@@ -11,91 +12,96 @@
       <div class="toc" id="toc">
           
           <ul class="nav level1">
-            <li>
-              <span class="expand-stub"></span>
-              <a href="CatLibrary.html" name="" title="CatLibrary">CatLibrary</a>
-                
-                <ul class="nav level2">
-                  <li>
-                    <a href="CatLibrary.Cat-2.html" name="" title="Cat&lt;T, K&gt;">Cat&lt;T, K&gt;</a>
-                  </li>
-                  <li>
-                    <a href="CatLibrary.CatException-1.html" name="" title="CatException&lt;T&gt;">CatException&lt;T&gt;</a>
-                  </li>
-                  <li>
-                    <a href="CatLibrary.Complex-2.html" name="" title="Complex&lt;T, J&gt;">Complex&lt;T, J&gt;</a>
-                  </li>
-                  <li>
-                    <a href="CatLibrary.FakeDelegate-1.html" name="" title="FakeDelegate&lt;T&gt;">FakeDelegate&lt;T&gt;</a>
-                  </li>
-                  <li>
-                    <a href="CatLibrary.IAnimal.html" name="" title="IAnimal">IAnimal</a>
-                  </li>
-                  <li>
-                    <a href="CatLibrary.ICat.html" name="" title="ICat">ICat</a>
-                  </li>
-                  <li>
-                    <a href="CatLibrary.ICatExtension.html" name="" title="ICatExtension">ICatExtension</a>
-                  </li>
-                  <li>
-                    <a href="CatLibrary.MRefDelegate-3.html" name="" title="MRefDelegate&lt;K, T, L&gt;">MRefDelegate&lt;K, T, L&gt;</a>
-                  </li>
-                  <li>
-                    <a href="CatLibrary.MRefNormalDelegate.html" name="" title="MRefNormalDelegate">MRefNormalDelegate</a>
-                  </li>
-                  <li>
-                    <a href="CatLibrary.Tom.html" name="" title="Tom">Tom</a>
-                  </li>
-                  <li>
-                    <a href="CatLibrary.TomFromBaseClass.html" name="" title="TomFromBaseClass">TomFromBaseClass</a>
-                  </li>
-                </ul>  </li>
-            <li>
-              <span class="expand-stub"></span>
-              <a href="Microsoft.DevDiv.html" name="" title="Microsoft.DevDiv">Microsoft.DevDiv</a>
-                
-                <ul class="nav level2">
-                  <li>
-                    <a href="Microsoft.DevDiv.ContainersRefType.html" name="" title="ContainersRefType">ContainersRefType</a>
-                  </li>
-                  <li>
-                    <a href="Microsoft.DevDiv.ContainersRefType.ColorType.html" name="" title="ContainersRefType.ColorType">ContainersRefType.ColorType</a>
-                  </li>
-                  <li>
-                    <a href="Microsoft.DevDiv.ContainersRefType.ContainersRefTypeChild.html" name="" title="ContainersRefType.ContainersRefTypeChild">ContainersRefType.ContainersRefTypeChild</a>
-                  </li>
-                  <li>
-                    <a href="Microsoft.DevDiv.ContainersRefType.ContainersRefTypeChildInterface.html" name="" title="ContainersRefType.ContainersRefTypeChildInterface">ContainersRefType.ContainersRefTypeChildInterface</a>
-                  </li>
-                  <li>
-                    <a href="Microsoft.DevDiv.ContainersRefType.ContainersRefTypeDelegate.html" name="" title="ContainersRefType.ContainersRefTypeDelegate">ContainersRefType.ContainersRefTypeDelegate</a>
-                  </li>
-                  <li>
-                    <a href="Microsoft.DevDiv.ExplicitLayoutClass.html" name="" title="ExplicitLayoutClass">ExplicitLayoutClass</a>
-                  </li>
-                </ul>  </li>
-            <li>
-              <span class="expand-stub"></span>
-              <a href="MRef.Demo.Enumeration.html" name="" title="MRef.Demo.Enumeration">MRef.Demo.Enumeration</a>
-                
-                <ul class="nav level2">
-                  <li>
-                    <a href="MRef.Demo.Enumeration.ColorType.html" name="" title="ColorType">ColorType</a>
-                  </li>
-                </ul>  </li>
-            <li>
-              <span class="expand-stub"></span>
-              <a href="VBTestClass1.html" name="" title="VBTestClass1">VBTestClass1</a>
-                
-                <ul class="nav level2">
-                  <li>
-                    <a href="VBTestClass1.BaseClass1.html" name="" title="BaseClass1">BaseClass1</a>
-                  </li>
-                  <li>
-                    <a href="VBTestClass1.Class1.html" name="" title="Class1">Class1</a>
-                  </li>
-                </ul>  </li>
-          </ul>      </div>
+                <li>
+                    <span class="expand-stub"></span>
+                    <a href="CatLibrary.html" name="" title="CatLibrary">CatLibrary</a>
+                    
+                    <ul class="nav level2">
+                          <li>
+                              <a href="CatLibrary.Cat-2.html" name="" title="Cat&lt;T, K&gt;">Cat&lt;T, K&gt;</a>
+                          </li>
+                          <li>
+                              <a href="CatLibrary.CatException-1.html" name="" title="CatException&lt;T&gt;">CatException&lt;T&gt;</a>
+                          </li>
+                          <li>
+                              <a href="CatLibrary.Complex-2.html" name="" title="Complex&lt;T, J&gt;">Complex&lt;T, J&gt;</a>
+                          </li>
+                          <li>
+                              <a href="CatLibrary.FakeDelegate-1.html" name="" title="FakeDelegate&lt;T&gt;">FakeDelegate&lt;T&gt;</a>
+                          </li>
+                          <li>
+                              <a href="CatLibrary.IAnimal.html" name="" title="IAnimal">IAnimal</a>
+                          </li>
+                          <li>
+                              <a href="CatLibrary.ICat.html" name="" title="ICat">ICat</a>
+                          </li>
+                          <li>
+                              <a href="CatLibrary.ICatExtension.html" name="" title="ICatExtension">ICatExtension</a>
+                          </li>
+                          <li>
+                              <a href="CatLibrary.MRefDelegate-3.html" name="" title="MRefDelegate&lt;K, T, L&gt;">MRefDelegate&lt;K, T, L&gt;</a>
+                          </li>
+                          <li>
+                              <a href="CatLibrary.MRefNormalDelegate.html" name="" title="MRefNormalDelegate">MRefNormalDelegate</a>
+                          </li>
+                          <li>
+                              <a href="CatLibrary.Tom.html" name="" title="Tom">Tom</a>
+                          </li>
+                          <li>
+                              <a href="CatLibrary.TomFromBaseClass.html" name="" title="TomFromBaseClass">TomFromBaseClass</a>
+                          </li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="expand-stub"></span>
+                    <a href="Microsoft.DevDiv.html" name="" title="Microsoft.DevDiv">Microsoft.DevDiv</a>
+                    
+                    <ul class="nav level2">
+                          <li>
+                              <a href="Microsoft.DevDiv.ContainersRefType.html" name="" title="ContainersRefType">ContainersRefType</a>
+                          </li>
+                          <li>
+                              <a href="Microsoft.DevDiv.ContainersRefType.ColorType.html" name="" title="ContainersRefType.ColorType">ContainersRefType.ColorType</a>
+                          </li>
+                          <li>
+                              <a href="Microsoft.DevDiv.ContainersRefType.ContainersRefTypeChild.html" name="" title="ContainersRefType.ContainersRefTypeChild">ContainersRefType.ContainersRefTypeChild</a>
+                          </li>
+                          <li>
+                              <a href="Microsoft.DevDiv.ContainersRefType.ContainersRefTypeChildInterface.html" name="" title="ContainersRefType.ContainersRefTypeChildInterface">ContainersRefType.ContainersRefTypeChildInterface</a>
+                          </li>
+                          <li>
+                              <a href="Microsoft.DevDiv.ContainersRefType.ContainersRefTypeDelegate.html" name="" title="ContainersRefType.ContainersRefTypeDelegate">ContainersRefType.ContainersRefTypeDelegate</a>
+                          </li>
+                          <li>
+                              <a href="Microsoft.DevDiv.ExplicitLayoutClass.html" name="" title="ExplicitLayoutClass">ExplicitLayoutClass</a>
+                          </li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="expand-stub"></span>
+                    <a href="MRef.Demo.Enumeration.html" name="" title="MRef.Demo.Enumeration">MRef.Demo.Enumeration</a>
+                    
+                    <ul class="nav level2">
+                          <li>
+                              <a href="MRef.Demo.Enumeration.ColorType.html" name="" title="ColorType">ColorType</a>
+                          </li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="expand-stub"></span>
+                    <a href="VBTestClass1.html" name="" title="VBTestClass1">VBTestClass1</a>
+                    
+                    <ul class="nav level2">
+                          <li>
+                              <a href="VBTestClass1.BaseClass1.html" name="" title="BaseClass1">BaseClass1</a>
+                          </li>
+                          <li>
+                              <a href="VBTestClass1.Class1.html" name="" title="Class1">Class1</a>
+                          </li>
+                    </ul>
+                </li>
+          </ul>
+      </div>
     </div>
   </div>
 </div>
