@@ -46,6 +46,12 @@ namespace CatLibrary
         /// </summary>
         /// <param name="food">Food to eat</param>
         void Eat(string food);
+
+        /// <summary>
+        /// Feed the animal with a lot of food
+        /// </summary>
+        /// <param name="food">Food to eat</param>
+        void EatALot(string lot_of_food); 
     }
 
     /// <summary>
@@ -247,6 +253,11 @@ namespace CatLibrary
         /// </summary>
         /// <param name="food">Food to eat</param>
         void IAnimal.Eat(string food) { }
+
+        public void EatALot(string lot_of_food)
+        {
+             
+        }
 
         //EII Property
         /// <summary>

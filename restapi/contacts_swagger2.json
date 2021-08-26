@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Contacts",
+    "title": "User Managments",
     "version": "1.6"
   },
   "paths": {
