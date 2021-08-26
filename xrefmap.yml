@@ -149,6 +149,23 @@ references:
   fullName.vb: CatLibrary.Cat(Of T, K).CatLibrary.ICat.eat
   nameWithType: Cat<T, K>.ICat.eat
   nameWithType.vb: Cat(Of T, K).CatLibrary.ICat.eat
+- uid: CatLibrary.Cat`2.EatALot(System.String)
+  name: EatALot(String)
+  href: api/CatLibrary.Cat-2.html#CatLibrary_Cat_2_EatALot_System_String_
+  commentId: M:CatLibrary.Cat`2.EatALot(System.String)
+  fullName: CatLibrary.Cat<T, K>.EatALot(System.String)
+  fullName.vb: CatLibrary.Cat(Of T, K).EatALot(System.String)
+  nameWithType: Cat<T, K>.EatALot(String)
+  nameWithType.vb: Cat(Of T, K).EatALot(String)
+- uid: CatLibrary.Cat`2.EatALot*
+  name: EatALot
+  href: api/CatLibrary.Cat-2.html#CatLibrary_Cat_2_EatALot_
+  commentId: Overload:CatLibrary.Cat`2.EatALot
+  isSpec: "True"
+  fullName: CatLibrary.Cat<T, K>.EatALot
+  fullName.vb: CatLibrary.Cat(Of T, K).EatALot
+  nameWithType: Cat<T, K>.EatALot
+  nameWithType.vb: Cat(Of T, K).EatALot
 - uid: CatLibrary.Cat`2.Equals(System.Object)
   name: Equals(Object)
   href: api/CatLibrary.Cat-2.html#CatLibrary_Cat_2_Equals_System_Object_
@@ -369,6 +386,19 @@ references:
   fullName.vb: CatLibrary.IAnimal.Eat(Of Tool)(Tool)
   nameWithType: IAnimal.Eat<Tool>(Tool)
   nameWithType.vb: IAnimal.Eat(Of Tool)(Tool)
+- uid: CatLibrary.IAnimal.EatALot(System.String)
+  name: EatALot(String)
+  href: api/CatLibrary.IAnimal.html#CatLibrary_IAnimal_EatALot_System_String_
+  commentId: M:CatLibrary.IAnimal.EatALot(System.String)
+  fullName: CatLibrary.IAnimal.EatALot(System.String)
+  nameWithType: IAnimal.EatALot(String)
+- uid: CatLibrary.IAnimal.EatALot*
+  name: EatALot
+  href: api/CatLibrary.IAnimal.html#CatLibrary_IAnimal_EatALot_
+  commentId: Overload:CatLibrary.IAnimal.EatALot
+  isSpec: "True"
+  fullName: CatLibrary.IAnimal.EatALot
+  nameWithType: IAnimal.EatALot
 - uid: CatLibrary.IAnimal.Item(System.Int32)
   name: Item[Int32]
   href: api/CatLibrary.IAnimal.html#CatLibrary_IAnimal_Item_System_Int32_
@@ -498,36 +528,36 @@ references:
   isSpec: "True"
   fullName: CatLibrary.TomFromBaseClass.TomFromBaseClass
   nameWithType: TomFromBaseClass.TomFromBaseClass
-- uid: graph.windows.net/myorganization/Contacts/1.6
-  name: Contacts
+- uid: graph.windows.net/myorganization/User Managments/1.6
+  name: User Managments
   href: restapi/contacts.html
-- uid: graph.windows.net/myorganization/Contacts/1.6/delete contact
+- uid: graph.windows.net/myorganization/User Managments/1.6/delete contact
   name: delete contact
-  href: restapi/contacts.html#graph_windows_net_myorganization_Contacts_1_6_delete_contact
-- uid: graph.windows.net/myorganization/Contacts/1.6/delete contact manager by id
+  href: restapi/contacts.html#graph_windows_net_myorganization_User_Managments_1_6_delete_contact
+- uid: graph.windows.net/myorganization/User Managments/1.6/delete contact manager by id
   name: delete contact manager by id
-  href: restapi/contacts.html#graph_windows_net_myorganization_Contacts_1_6_delete_contact_manager_by_id
-- uid: graph.windows.net/myorganization/Contacts/1.6/get contact by id
+  href: restapi/contacts.html#graph_windows_net_myorganization_User_Managments_1_6_delete_contact_manager_by_id
+- uid: graph.windows.net/myorganization/User Managments/1.6/get contact by id
   name: get contact by id
-  href: restapi/contacts.html#graph_windows_net_myorganization_Contacts_1_6_get_contact_by_id
-- uid: graph.windows.net/myorganization/Contacts/1.6/get contact direct reports links
+  href: restapi/contacts.html#graph_windows_net_myorganization_User_Managments_1_6_get_contact_by_id
+- uid: graph.windows.net/myorganization/User Managments/1.6/get contact direct reports links
   name: get contact direct reports links
-  href: restapi/contacts.html#graph_windows_net_myorganization_Contacts_1_6_get_contact_direct_reports_links
-- uid: graph.windows.net/myorganization/Contacts/1.6/get contact manager link
+  href: restapi/contacts.html#graph_windows_net_myorganization_User_Managments_1_6_get_contact_direct_reports_links
+- uid: graph.windows.net/myorganization/User Managments/1.6/get contact manager link
   name: get contact manager link
-  href: restapi/contacts.html#graph_windows_net_myorganization_Contacts_1_6_get_contact_manager_link
-- uid: graph.windows.net/myorganization/Contacts/1.6/get contact memberOf links
+  href: restapi/contacts.html#graph_windows_net_myorganization_User_Managments_1_6_get_contact_manager_link
+- uid: graph.windows.net/myorganization/User Managments/1.6/get contact memberOf links
   name: get contact memberOf links
-  href: restapi/contacts.html#graph_windows_net_myorganization_Contacts_1_6_get_contact_memberOf_links
-- uid: graph.windows.net/myorganization/Contacts/1.6/get contacts
+  href: restapi/contacts.html#graph_windows_net_myorganization_User_Managments_1_6_get_contact_memberOf_links
+- uid: graph.windows.net/myorganization/User Managments/1.6/get contacts
   name: get contacts
-  href: restapi/contacts.html#graph_windows_net_myorganization_Contacts_1_6_get_contacts
-- uid: graph.windows.net/myorganization/Contacts/1.6/update contact
+  href: restapi/contacts.html#graph_windows_net_myorganization_User_Managments_1_6_get_contacts
+- uid: graph.windows.net/myorganization/User Managments/1.6/update contact
   name: update contact
-  href: restapi/contacts.html#graph_windows_net_myorganization_Contacts_1_6_update_contact
-- uid: graph.windows.net/myorganization/Contacts/1.6/update contact manager
+  href: restapi/contacts.html#graph_windows_net_myorganization_User_Managments_1_6_update_contact
+- uid: graph.windows.net/myorganization/User Managments/1.6/update contact manager
   name: update contact manager
-  href: restapi/contacts.html#graph_windows_net_myorganization_Contacts_1_6_update_contact_manager
+  href: restapi/contacts.html#graph_windows_net_myorganization_User_Managments_1_6_update_contact_manager
 - uid: Microsoft.DevDiv
   name: Microsoft.DevDiv
   href: api/Microsoft.DevDiv.html
