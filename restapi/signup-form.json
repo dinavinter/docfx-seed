@@ -16,6 +16,65 @@
   ],
   "components": {
     "schemas": {
+      "SchemaDefinition": {
+        "type": "object",
+        "properties": {
+          "requiredPurposes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": [
+                "purpose-analytics",
+                "purpose-marketing",
+                "purpose-channel"
+              ]
+            }
+          },
+          "allowedChannels": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": [
+                "email",
+                "phone",
+                "purpose-channel"
+              ]
+            }
+          },
+          "preferences": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "frequency": {
+                  "type": "string",
+                  "enum": [
+                    "daily",
+                    "weekly"
+                  ]
+                },
+                "channel": {
+                  "type": "string",
+                  "enum": [
+                    "email",
+                    "SMS"
+                  ]
+                },
+                "interests": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "pets",
+                      "cars"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "ConsentState": {
         "description": "The latest consent state known by the server or client, takes value of [accepted, rejected, unknown]",
         "type": "string",
@@ -30,7 +89,7 @@
           "unknown"
         ]
       },
-      "ConsentCheckRequest": {
+      "CheckRequest": {
         "type": "object",
         "required": [
           "consentInstanceId"
@@ -46,7 +105,14 @@
           "consentStateValue": {
             "description": "the stored consent state in client cache takes value of [accepted, rejected, unknown]",
             "type": "string",
+            "enum": [
+              "rejected",
+              "accepted",
+              "unknown"
+            ],
             "example": [
+              "rejected",
+              "accepted",
               "unknown"
             ]
           },
@@ -59,7 +125,7 @@
           }
         }
       },
-      "ConsentCheckResponse": {
+      "CheckResponse": {
         "type": "object",
         "required": [
           "consentInstanceId"
@@ -104,13 +170,9 @@
           "metadata": {
             "type": "object",
             "properties": {
-              "purposeConsentRequired": {
-                "type": "array",
-                "example": [
-                  "purpose-analytics",
-                  "purpose-marketing",
-                  "purpose-channel"
-                ]
+              "schemaDefinition": {
+                "type": "object",
+                "example": "#/components/schemas/SchemaDefinition"
               }
             }
           }
@@ -205,7 +267,7 @@
           }
         }
       },
-      "UpdatePreferencesRequest": {
+      "UpdateRequest": {
         "type": "object",
         "required": [
           "consentInstanceId"
@@ -283,7 +345,7 @@
     }
   },
   "paths": {
-    "/preferences/communication/check": {
+    "/preferences/communication/": {
       "summary": "Communication preferences check status",
       "description": "This API path is used to check a status of a communication preferences, initiate a new draft of consent if not exists",
       "post": {
@@ -293,7 +355,7 @@
               "encoding": "",
               "example": "",
               "schema": {
-                "$ref": "#/components/schemas/ConsentCheckRequest"
+                "$ref": "#/components/schemas/CheckRequest"
               }
             }
           },
@@ -305,15 +367,15 @@
         "summary": "check a status of the communication preferences. "
       },
       "options": {
-        "operationId" : "communication-preferences-check",
+        "operationId": "communication-preferences-check",
         "tags": [],
         "responses": {
-          "200":{
+          "200": {
             "description": "Returns status of the communication consents",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConsentCheckResponse"
+                  "$ref": "#/components/schemas/CheckResponse"
                 }
               }
             },
@@ -326,62 +388,57 @@
               }
             }
           }
- 
-          
-        } 
-    }},
+        }
+      }
+    },
     "/paths/preferences/communication/{instanceId}": {
       "summary": "Update user communication preferences",
       "description": "This API path is used to check a status of a communication preferences, initiate a new draft of consent if not exists",
-       "put": {
+      "put": {
         "requestBody": {
           "content": {
             "application/json": {
               "encoding": "",
               "example": "",
               "schema": {
-                "$ref": "#/components/schemas/UpdatePreferencesRequest"
+                "$ref": "#/components/schemas/UpdateRequest"
               }
             }
           },
           "required": true,
           "description": ""
         },
-         "tags": [
-           "signup-form"
-
-         ],
+        "tags": [
+          "signup-form"
+        ],
         "summary": "check a status of the communication preferences. "
       },
       "options": {
         "tags": [
-          "signup-form" 
-        ], 
+          "signup-form"
+        ],
         "responses": {
-             "200":{
-              "description": "Returns status of the communication consents",
-              "content": {
-                "application/json": {
-                  "schema": { 
-                    "$ref": "#/components/schemas/ConsentCheckResponse"
-                    
-                  }
+          "200": {
+            "description": "Returns status of the communication consents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckResponse"
                 }
-              },
-              "links": {
-                "ConsentCheckResponse": {
-                  "operationRef": "#/paths/preferences/communication/{instanceId}",
-                  "parameters": {
-                    "instanceId": "$response.body#/consentInstanceId"
-                  }
+              }
+            },
+            "links": {
+              "ConsentCheckResponse": {
+                "operationRef": "#/paths/preferences/communication/{instanceId}",
+                "parameters": {
+                  "instanceId": "$response.body#/consentInstanceId"
                 }
               }
             }
-
           }
         }
       }
-    
+    }
   },
   "security": [
     {
