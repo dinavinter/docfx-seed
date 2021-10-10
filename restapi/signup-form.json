@@ -284,6 +284,21 @@
           "purposes": {
             "$ref": "#/components/schemas/Purposes"
           },
+          "preferences": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "preference": {
+                  "type": "string",
+                  "example": ["frequency.daily", "channel.email"]
+                },
+                "enable": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
           "attributes": {
             "type": "object",
             "properties": {
