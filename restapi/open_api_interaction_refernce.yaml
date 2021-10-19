@@ -121,14 +121,13 @@ paths:
                   identity:
                     email: email@mail.com
                   newsletter: true
-                  deals': true
+                  deals: true
               phone-channel:
                 value:
                   channel: sms
                   identity:
                     phonenumber: 0543332123
                   newsletter: true
-                  deals': true
       responses:
         '201':
           description: Submit form
