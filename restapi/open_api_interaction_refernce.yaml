@@ -1,0 +1,205 @@
+openapi: 3.0.9
+info:
+  title: Communication Collector
+  version: '1.0'
+  x-logo:
+    url: ''
+servers:
+  - url: 'https://accounts.gigya.com'
+    description: ''
+    x-last-modified: 1633814282661
+components:
+  schemas:
+    UnauthorizedError:
+      description: Access token is missing or invalid.
+    identity-email:
+      type: object
+      properties:
+        identity:
+          type: object
+          properties:
+            email:
+              type: string
+          required:
+            - email
+    identity-phone:
+      type: object
+      properties:
+        identity:
+          type: object
+          properties:
+            phonrnumber:
+              type: string
+          required:
+            - phonrnumber
+    SchemaDefinition:
+      properties:
+        channel:
+          type: string
+      discriminator:
+        propertyName: channel
+        mapping:
+          email: '#/components/schemas/EmailSchema'
+          sms: '#/components/schemas/SmsSchema'
+      allOf:
+        - anyOf:
+            - $ref: '#/components/schemas/EmailSchema'
+            - $ref: '#/components/schemas/SmsSchema'
+      x-examples:
+        email-channel:
+          channel: email
+          identity:
+            email: a@mail.com
+            newsletter: true
+            deals: true
+        phone-channel:
+          channel: phone
+          identity:
+            phonenumber: '056999999'
+            newsletter: true
+    EmailSchema:
+      allOf:
+        - $ref: '#/components/schemas/identity-email'
+        - type: object
+          properties:
+            'newsletter':
+              type: boolean
+              title: Newsletter
+            'deals':
+              type: boolean
+              title: Deals
+      type: object
+    SmsSchema:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/identity-phone'
+        - type: object
+          properties:
+            'newsletter':
+              type: boolean
+              title: Newsletter
+    Transaction:
+      properties:
+        transactionId:
+          type: string
+  securitySchemes:
+    oAuth2Commit:    # <---- arbitrary name
+      type: oauth2
+      description: This API uses OAuth with the implicit grant flow.
+      flows:
+        implicit:
+          authorizationUrl: /oauth2/authorize
+          scopes:
+            collector:commit: commit collector transaction
+security:
+  - oAuth2Commit:
+      - collector:commit
+
+
+paths:
+  /accounts/v1/me/collectors/{collector-config}:
+    summary: Communications Collector
+    post:
+      operationId: SubmitCollector
+      description: 'Initiate collector interaction with user data'
+      parameters:
+        - in: path
+          name: collector-config
+          required: true
+          schema:
+            type: string
+          example: sigh-up-form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchemaDefinition'
+            examples:
+              email-channel:
+                value:
+                  channel: phone
+                  identity:
+                    phonenumber: 0543332123
+                  communication:
+                    'newsletter': true
+                    'deals': true
+      responses:
+        '201':
+          description: Submit form
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          links:
+            CollectorTransaction:
+              operationId: CommitCollector
+              parameters:
+                transctionId: '$response.body#/transactionId'
+              description: A uuid to commit the transaction and update the account
+
+  /accounts/v1/me/collectors/{collector-config}/{transactionId}/commit:
+    put:
+      security:
+        - oAuth2Commit:
+            - collector:commit
+
+      operationId: CommitCollector
+      description: Commit the transaction and update the account.
+      parameters:
+        - in: path
+          name: transactionId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: collector-config
+          required: true
+          schema:
+            type: string
+          example: sigh-up-form
+      responses:
+        '200':
+          description: Ok, account updated with specfic transction details.
+        '401':
+          description: Access token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_uri:
+                    type: string
+                    example: urn:transaction:bwc4JK-ESC0w8acc191e-Y1LTC2
+                  expires_in:
+                    type: integer
+                    example: 60
+          links:
+            AuthorizationRequest:
+              operationId: AuthorizationRequest
+              parameters:
+                request_uri: '$response.body#/request_uri'
+              description: A uuid to commit the transaction and update the account
+
+  /oauth/authorize/{request_uri}:
+    post:
+      parameters:
+        - in: path
+          name: request_uri
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Token created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  expires_in:
+                    type: integer
+                    example: 60
+
+tags: []

@@ -1,0 +1,154 @@
+openapi: 3.1.0
+info:
+  title: Communication Preferences
+  version: '1.0'
+  x-logo:
+    url: ''
+servers:
+  - url: 'https://accounts.gigya.com'
+    description: ''
+    x-last-modified: 1633814282661
+components:
+  schemas:
+    SchemaDefinition:
+      properties:
+        channel:
+          type: string
+      discriminator:
+        propertyName: channel
+        mapping:
+          email: '#/components/schemas/EmailSchema'
+          sms: '#/components/schemas/SmsSchema'
+      allOf:
+        - anyOf:
+            - $ref: '#/components/schemas/identity-email'
+            - $ref: '#/components/schemas/identity-phone'
+        - anyOf:
+            - type: object
+              properties:
+                communication:
+                  type: object
+                  properties:
+                    'newsletter:email':
+                      type: boolean
+                      title: Newsletter
+                    'deals:email':
+                      type: boolean
+                      title: Deals
+            - type: object
+              properties:
+                'communication:newsletter:sms':
+                  type: boolean
+                  title: Newsletter
+      x-examples:
+        email-channel:
+          channel: email
+          identity:
+            email: a@mail.com
+          communication:
+            'newsletter:email': true
+            'deals:email': true
+        phone-channel:
+          channel: phone
+          identity:
+            phonenumber: '056999999'
+          communication:
+            'newsletter:sms': true
+    EmailSchema:
+      allOf:
+        - $ref: '#/components/schemas/identity-email'
+        - type: object
+          properties:
+            'communication:newsletter:email':
+              type: boolean
+              title: Newsletter
+            'communication:deals:email':
+              type: boolean
+              title: Deals
+      type: object
+    SmsSchema:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/identity-phone'
+        - type: object
+          properties:
+            'communication:newsletter:sms':
+              type: boolean
+              title: Newsletter
+    CollectorRequest:
+      type: object
+    ErrorModel:
+      type: object
+      required:
+        - message
+        - code
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          minimum: 100
+          maximum: 600
+    ExtendedErrorModel:
+      allOf:
+        - $ref: '#/components/schemas/ErrorModel'
+        - type: object
+          required:
+            - rootCause
+          properties:
+            rootCause:
+              type: string
+paths:
+  /collectors/v1/communication/schema:
+    summary: Communications Collector
+    description: 'This API path is used to collect and update communication preferences, initiate a new draft of collector instance if not exists'
+    get:
+      operationId: GetCommunicationCollector
+      summary: 'check a status of the communication preferences. '
+      responses:
+        '200':
+          description: Returns collector config and existing data related to current user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/SchemaDefinition'
+                  form:
+                    $ref: ../models/FormSchema.yaml
+        '201':
+          description: Created collector config and draft data (when user is not logged-in.).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  form:
+                    $ref: ../models/FormSchema.yaml
+                  data:
+                    $ref: '#/components/schemas/SchemaDefinition'
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchemaDefinition'
+            examples:
+              email-channel:
+                value:
+                  channel: email
+                  identity:
+                    email: email@email.com
+                  communication:
+                    'newsletter:email': true
+                    'deals:email': true
+        required: true
+        description: ''
+      tags:
+        - signup-form
+      summary: 'check a status of the communication preferences. '
+      responses:
+        '200':
+          description: Ok.
+tags: []
