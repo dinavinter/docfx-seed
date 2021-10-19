@@ -1,465 +1,93 @@
 {
-  "openapi": "3.1.0",
-  "info": {
-    "title": "Communication Preferences",
-    "version": "1.0",
-    "x-logo": {
-      "url": ""
-    }
-  },
-  "servers": [
-    {
-      "url": "https://accounts.gigya.com",
-      "description": "",
-      "x-last-modified": 1633814282661
-    }
-  ],
-  "components": {
-    "schemas": {
-      "SchemaDefinition": {
-        "type": "object",
-        "properties": {
-          "requiredPurposes": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "example": [
-                "purpose-analytics",
-                "purpose-marketing",
-                "purpose-channel"
-              ]
-            }
-          },
-          "allowedChannels": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "example": [
-                "email",
-                "phone",
-                "purpose-channel"
-              ]
-            }
-          },
-          "preferences": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "frequency": {
-                  "type": "string",
-                  "enum": [
-                    "daily",
-                    "weekly"
-                  ]
-                },
-                "channel": {
-                  "type": "string",
-                  "enum": [
-                    "email",
-                    "SMS"
-                  ]
-                },
-                "interests": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "enum": [
-                      "pets",
-                      "cars"
-                    ]
-                  }
-                }
-              }
-            }
-          }
+  "definitions": {
+    "email": {
+      "type": "object",
+      "title": "Email",
+      "properties": {
+        "email": {
+          "type": "string"
         }
       },
-      "ConsentState": {
-        "description": "The latest consent state known by the server or client, takes value of [accepted, rejected, unknown]",
-        "type": "string",
-        "enum": [
-          "rejected",
-          "accepted",
-          "unknown"
-        ],
-        "example": [
-          "rejected",
-          "accepted",
-          "unknown"
-        ]
-      },
-      "CheckRequest": {
-        "type": "object",
-        "required": [
-          "consentInstanceId"
-        ],
-        "properties": {
-          "consentInstanceId": {
-            "type": "string",
-            "description": "Represents a unique id to the interaction",
-            "example": [
-              "newsletter"
-            ]
-          },
-          "consentStateValue": {
-            "description": "the stored consent state in client cache takes value of [accepted, rejected, unknown]",
-            "type": "string",
-            "enum": [
-              "rejected",
-              "accepted",
-              "unknown"
-            ],
-            "example": [
-              "rejected",
-              "accepted",
-              "unknown"
-            ]
-          },
-          "consentString": {
-            "type": "string",
-            "description": "The stored consent string in client cache",
-            "example": [
-              "Base 64 string reverence to the TCF consent string"
-            ]
-          }
-        }
-      },
-      "CheckResponse": {
-        "type": "object",
-        "required": [
-          "consentInstanceId"
-        ],
-        "properties": {
-          "consentRequired": {
-            "description": "Whether consent is required from the user."
-          },
-          "consentInstanceId": {
-            "type": "string",
-            "description": "Represents a unique id to the interaction",
-            "example": [
-              "newsletter",
-              "special-offers"
-            ]
-          },
-          "consentStateValue": {
-            "type": "string",
-            "description": "The latest consent state known by the server, takes value of [accepted, rejected, unknown]",
-            "enum": [
-              "rejected",
-              "accepted",
-              "unknown"
-            ],
-            "example": [
-              "rejected",
-              "accepted",
-              "unknown"
-            ]
-          },
-          "consentString": {
-            "type": "string",
-            "description": "The latest consent string known by the server, If the value is non-null, and if the consentStateValue is \"accepted\" or \"rejected\",the value will be cached at client.",
-            "example": [
-              "Base 64 string reverence to the TCF consent string"
-            ]
-          },
-          "expireCache": {
-            "type": "boolean",
-            "description": "Indicate that the cache needs to be cleared, set to `true` in conjunction with consentStateValue='accepted'/'rejected' to enforce server side consent state"
-          },
-          "metadata": {
-            "type": "object",
-            "properties": {
-              "schemaDefinition": {
-                "type": "object",
-                "example": "#/components/schemas/SchemaDefinition"
-              }
-            }
-          }
-        }
-      },
-      "PurposesFull": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "purpose": {
-              "type": "string",
-              "example": [
-                "sending-newsletter",
-                "sending-marketing-general",
-                "email-channel",
-                "sms-channel",
-                "tos"
-              ]
-            },
-            "consentType": {
-              "type": "string",
-              "enum": [
-                "EXPLICIT",
-                "IMPLICIT"
-              ],
-              "example": [
-                "EXPLICIT",
-                "IMPLICIT"
-              ]
-            },
-            "purposeCategory": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "example": [
-                "Marketing",
-                "Contact",
-                "Legal"
-              ]
-            },
-            "piiCategory": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "example": [
-                "email",
-                "phone"
-              ]
-            },
-            "primaryPurpose": {
-              "type": "boolean"
-            },
-            "termination": {
-              "type": "string",
-              "example": "day:30"
-            }
-          }
-        }
-      },
-      "Purposes": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "purpose": {
-              "type": "string",
-              "example": [
-                "sending-newsletter",
-                "sending-marketing-general",
-                "email-channel",
-                "sms-channel",
-                "tos"
-              ]
-            },
-            "consentType": {
-              "type": "string",
-              "enum": [
-                "EXPLICIT",
-                "IMPLICIT"
-              ],
-              "example": [
-                "EXPLICIT",
-                "IMPLICIT"
-              ]
-            },
-            "enabled": {
-              "type": "boolean"
-            }
-          }
-        }
-      },
-      "UpdateRequest": {
-        "type": "object",
-        "required": [
-          "consentInstanceId"
-        ],
-        "properties": {
-          "consentInstanceId": {
-            "type": "string",
-            "description": "Represents a unique id to the interaction",
-            "example": [
-              "newsletter",
-              "special-offers"
-            ]
-          },
-          "purposes": {
-            "$ref": "#/components/schemas/Purposes"
-          },
-          "preferences": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "preference": {
-                  "type": "string",
-                  "example": ["frequency.daily", "channel.email"]
-                },
-                "enable": {
-                  "type": "boolean"
-                }
-              }
-            }
-          },
-          "attributes": {
-            "type": "object",
-            "properties": {
-              "email": {
-                "type": "string",
-                "example": "email@email.com"
-              },
-              "phoneNumber": {
-                "type": "string",
-                "example": "email@email.com"
-              },
-              "name": {
-                "type": "string",
-                "example": "that’s my name"
-              },
-              "custom fields": {
-                "type": "string",
-                "example": "Interested in pets"
-              }
-            }
-          }
-        }
-      },
-      "ErrorModel": {
-        "type": "object",
-        "required": [
-          "message",
-          "code"
-        ],
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "code": {
-            "type": "integer",
-            "minimum": 100,
-            "maximum": 600
-          }
-        }
-      },
-      "ExtendedErrorModel": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/ErrorModel"
-          },
-          {
-            "type": "object",
-            "required": [
-              "rootCause"
-            ],
-            "properties": {
-              "rootCause": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      }
-    }
-  },
-  "paths": {
-    "/preferences/communication/": {
-      "summary": "Communication preferences check status",
-      "description": "This API path is used to check a status of a communication preferences, initiate a new draft of consent if not exists",
-      "post": {
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "encoding": "",
-              "example": "",
-              "schema": {
-                "$ref": "#/components/schemas/CheckRequest"
-              }
-            }
-          },
-          "required": true,
-          "description": ""
-        },
-        "tags": [],
-        "operationId": "communication-preferences-check",
-        "summary": "check a status of the communication preferences. "
-      },
-      "options": {
-        "operationId": "communication-preferences-check",
-        "tags": [],
-        "responses": {
-          "200": {
-            "description": "Returns status of the communication consents",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CheckResponse"
-                }
-              }
-            },
-            "links": {
-              "ConsentCheckResponse": {
-                "operationRef": "#/paths/preferences/communication/{instanceId}",
-                "parameters": {
-                  "instanceId": "$response.body#/consentInstanceId"
-                }
-              }
-            }
-          }
-        }
-      }
+      "required": [
+        "email"
+      ]
     },
-    "/paths/preferences/communication/{instanceId}": {
-      "summary": "Update user communication preferences",
-      "description": "This API path is used to check a status of a communication preferences, initiate a new draft of consent if not exists",
-      "put": {
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "encoding": "",
-              "example": "",
-              "schema": {
-                "$ref": "#/components/schemas/UpdateRequest"
-              }
-            }
-          },
-          "required": true,
-          "description": ""
-        },
-        "tags": [
-          "signup-form"
-        ],
-        "summary": "check a status of the communication preferences. "
+    "phone": {
+      "type": "object",
+      "properties": {
+        "phonenumber": {
+          "type": "string"
+        }
       },
-      "options": {
-        "tags": [
-          "signup-form"
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns status of the communication consents",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CheckResponse"
-                }
-              }
+      "required": [
+        "phonenumber"
+      ]
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "age": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "age"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/definitions/profile"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "email",
+        "sms"
+      ],
+      "default" : "email"
+    }
+  } ,
+  "dependencies": {
+    "channel": {
+      "oneOf": [
+        {
+          "properties": {
+            "channel": {
+              "type": "string",
+              "enum": [           "email"
+              ]
             },
-            "links": {
-              "ConsentCheckResponse": {
-                "operationRef": "#/paths/preferences/communication/{instanceId}",
-                "parameters": {
-                  "instanceId": "$response.body#/consentInstanceId"
-                }
-              }
+            "email" :{
+              "$ref":"#/definitions/email"
+            },
+            "deals": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "properties": {
+            "channel": {
+              "type": "string",
+              "enum": [
+                "sms"
+              ]
+            },
+            "phonenumber" :{
+              "$ref":"#/definitions/phone"
+            },
+            "newsletter": {
+              "type": "boolean"
             }
           }
         }
-      }
+      ]
     }
-  },
-  "security": [
-    {
-      
-      "JWTAuth": []
-    }
-  ],
-  "tags": []
+  }
 }
