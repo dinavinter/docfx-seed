@@ -117,12 +117,18 @@ paths:
             examples:
               email-channel:
                 value:
-                  channel: phone
+                  channel: email
+                  identity:
+                    email: email@mail.com
+                  newsletter: true
+                  deals': true
+              phone-channel:
+                value:
+                  channel: sms
                   identity:
                     phonenumber: 0543332123
-                  communication:
-                    'newsletter': true
-                    'deals': true
+                  newsletter: true
+                  deals': true
       responses:
         '201':
           description: Submit form
