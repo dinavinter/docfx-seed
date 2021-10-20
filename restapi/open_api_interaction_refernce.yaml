@@ -1,6 +1,6 @@
 openapi: 3.0.9
 info:
-  title: Communication Collector
+  title: Communication Interaction
   version: '1.0'
   x-logo:
     url: ''
@@ -78,33 +78,35 @@ components:
             'newsletter':
               type: boolean
               title: Newsletter
-    Transaction:
+    Interaction:
       properties:
+        interactionId:
+          type: string
         transactionId:
           type: string
   securitySchemes:
-    oAuth2Commit:    # <---- arbitrary name
+    oAuth2Confirm:    # <---- arbitrary name
       type: oauth2
       description: This API uses OAuth with the implicit grant flow.
       flows:
         implicit:
           authorizationUrl: /oauth2/authorize
           scopes:
-            collector:commit: commit collector transaction
+            interaction:confirm:  confirm interaction
 security:
-  - oAuth2Commit:
-      - collector:commit
+  - oAuth2Confirm:
+      - interaction:confirm
 
 
 paths:
-  /accounts/v1/me/collectors/{collector-config}/schema:
-    summary: Collector Schema
+  /accounts/v1/me/interactions/{interaction-config}/schema:
+    summary: Interaction Schema
     get:
-      operationId: CollectorSchema
+      operationId: InteractionSchema
       description: 'schema'
       parameters:
         - in: path
-          name: collector-config
+          name: interaction-config
           required: true
           schema:
             type: string
@@ -118,14 +120,14 @@ paths:
                 type: object
                 example: /signup-form.json
 
-  /accounts/v1/me/collectors/{collector-config}:
-    summary: Communications Collector
+  /accounts/v1/me/interactions/{interaction-config}:
+    summary: Communications Interaction
     post:
-      operationId: SubmitCollector
-      description: 'Initiate collector interaction with user data'
+      operationId: SubmitInteraction
+      description: 'Submit interaction form'
       parameters:
         - in: path
-          name: collector-config
+          name: interaction-config
           required: true
           schema:
             type: string
@@ -155,30 +157,30 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transaction'
+                $ref: '#/components/schemas/Interaction'
           links:
-            CollectorTransaction:
-              operationId: CommitCollector
+            InteractionLink:
+              operationId: ConfirmInteraction
               parameters:
-                transctionId: '$response.body#/transactionId'
-              description: A uuid to commit the transaction and update the account
+                interactionId: '$response.body#/interactionId'
+              description: A uuid to confirm the intraction and update the account
 
-  /accounts/v1/me/collectors/{collector-config}/{transactionId}/commit:
+  /accounts/v1/me/interactions/{interaction-config}/{interactionId}/confirm:
     put:
       security:
-        - oAuth2Commit:
-            - collector:commit
+        - oAuth2Confirm:
+            - interaction:confirm
 
-      operationId: CommitCollector
-      description: Commit the transaction and update the account.
+      operationId: ConfirmInteraction
+      description: Commit the interaction and update the account.
       parameters:
         - in: path
-          name: transactionId
+          name: interactionId
           required: true
           schema:
             type: string
         - in: path
-          name: collector-config
+          name: interaction-config
           required: true
           schema:
             type: string
