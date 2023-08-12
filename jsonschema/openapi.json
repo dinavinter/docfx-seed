@@ -1,0 +1,86 @@
+{
+ 
+  "type": "object",
+  "allOf": [
+    {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SchemaDefinition"
+        }
+         
+      ]
+    }
+  ],
+  "$defs": {
+    "identity-email": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "email"
+          ]
+        }
+      }
+    },
+    "identity-phone": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "type": "object",
+          "properties": {
+            "phonrnumber": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "phonrnumber"
+          ]
+        }
+      }
+    },
+    "EmailSchema": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/identity-email"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "communication:newsletter:email": {
+              "type": "boolean",
+              "title": "Newsletter"
+            },
+            "communication:deals:email": {
+              "type": "boolean",
+              "title": "Deals"
+            }
+          }
+        }
+      ],
+      "type": "object"
+    },
+    "SmsSchema": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/identity-phone"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "communication:newsletter:sms": {
+              "type": "boolean",
+              "title": "Newsletter"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

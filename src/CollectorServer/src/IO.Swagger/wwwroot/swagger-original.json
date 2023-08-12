@@ -1,0 +1,324 @@
+{
+  "openapi" : "3.0.9",
+  "info" : {
+    "title" : "Communication Collector",
+    "version" : "1.0",
+    "x-logo" : {
+      "url" : ""
+    }
+  },
+  "servers" : [ {
+    "url" : "https://accounts.gigya.com",
+    "x-last-modified" : 1633814282661
+  } ],
+  "security" : [ {
+    "oAuth2Commit" : [ "collector:commit" ]
+  } ],
+  "paths" : {
+    "/accounts/v1/me/collectors/{collector-config}" : {
+      "summary" : "Communications Collector",
+      "post" : {
+        "description" : "Intiate collector interaction with user data",
+        "operationId" : "GetCommunicationCollector",
+        "parameters" : [ {
+          "name" : "collector-config",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "sigh-up-form"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SchemaDefinition"
+              },
+              "examples" : {
+                "email-channel" : {
+                  "value" : {
+                    "channel" : "phone",
+                    "identity" : {
+                      "phonenumber" : 543332123
+                    },
+                    "communication" : {
+                      "newsletter" : true,
+                      "deals" : true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Submit form",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Transaction"
+                }
+              }
+            },
+            "links" : {
+              "CollectorTransaction" : {
+                "operationId" : "CommitCollectorRequest",
+                "parameters" : {
+                  "transctionId" : "$response.body#/transactionId"
+                },
+                "description" : "A uuid to commit the transaction and update the account"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/v1/me/collectors/{collector-config}/{transactionId}/commit" : {
+      "put" : {
+        "description" : "Commit the transaction and update the account.",
+        "operationId" : "CommitCollectorRequest",
+        "parameters" : [ {
+          "name" : "transactionId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "collector-config",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "sigh-up-form"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok, account updated with specfic transction details."
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "links" : {
+              "AuthorizationRequest" : {
+                "operationId" : "AuthorizationRequest",
+                "parameters" : {
+                  "request_uri" : "$response.body#/request_uri"
+                },
+                "description" : "A uuid to commit the transaction and update the account"
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "oAuth2Commit" : [ "collector:commit" ]
+        } ]
+      }
+    },
+    "/oauth/authorize/{request_uri}" : {
+      "post" : {
+        "parameters" : [ {
+          "name" : "request_uri",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Token created.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "UnauthorizedError" : {
+        "description" : "Access token is missing or invalid."
+      },
+      "identity-email" : {
+        "type" : "object",
+        "properties" : {
+          "identity" : {
+            "$ref" : "#/components/schemas/identityemail_identity"
+          }
+        }
+      },
+      "identity-phone" : {
+        "type" : "object",
+        "properties" : {
+          "identity" : {
+            "$ref" : "#/components/schemas/identityphone_identity"
+          }
+        }
+      },
+      "SchemaDefinition" : {
+        "properties" : {
+          "channel" : {
+            "type" : "string"
+          }
+        },
+        "discriminator" : {
+          "propertyName" : "Channel",
+          "mapping" : {
+            "email" : "#/components/schemas/EmailSchema",
+            "sms" : "#/components/schemas/SmsSchema"
+          }
+        },
+        "allOf" : [ {
+          "anyOf" : [ {
+            "$ref" : "#/components/schemas/EmailSchema"
+          }, {
+            "$ref" : "#/components/schemas/SmsSchema"
+          } ]
+        } ],
+        "x-examples" : {
+          "email-channel" : {
+            "channel" : "email",
+            "identity" : {
+              "email" : "a@mail.com",
+              "newsletter" : true,
+              "deals" : true
+            }
+          },
+          "phone-channel" : {
+            "channel" : "phone",
+            "identity" : {
+              "phonenumber" : "056999999",
+              "newsletter" : true
+            }
+          }
+        }
+      },
+      "EmailSchema" : {
+        "type" : "object",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/identity-email"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "newsletter" : {
+              "title" : "Newsletter",
+              "type" : "boolean"
+            },
+            "deals" : {
+              "title" : "Deals",
+              "type" : "boolean"
+            }
+          }
+        } ]
+      },
+      "SmsSchema" : {
+        "type" : "object",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/identity-phone"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "newsletter" : {
+              "title" : "Newsletter",
+              "type" : "boolean"
+            }
+          }
+        } ]
+      },
+      "Transaction" : {
+        "properties" : {
+          "transactionId" : {
+            "type" : "string"
+          }
+        },
+        "example" : {
+          "transactionId" : "transactionId"
+        }
+      },
+      "inline_response_401" : {
+        "type" : "object",
+        "properties" : {
+          "request_uri" : {
+            "type" : "string",
+            "example" : "urn:transaction:bwc4JK-ESC0w8acc191e-Y1LTC2"
+          },
+          "expires_in" : {
+            "type" : "integer",
+            "example" : 60
+          }
+        }
+      },
+      "inline_response_201" : {
+        "type" : "object",
+        "properties" : {
+          "token" : {
+            "type" : "string"
+          },
+          "expires_in" : {
+            "type" : "integer",
+            "example" : 60
+          }
+        },
+        "example" : {
+          "expires_in" : 60,
+          "token" : "token"
+        }
+      },
+      "identityemail_identity" : {
+        "required" : [ "email" ],
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string"
+          }
+        }
+      },
+      "identityphone_identity" : {
+        "required" : [ "phonrnumber" ],
+        "type" : "object",
+        "properties" : {
+          "phonrnumber" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "oAuth2Commit" : {
+        "type" : "oauth2",
+        "description" : "This API uses OAuth with the implicit grant flow.",
+        "flows" : {
+          "implicit" : {
+            "authorizationUrl" : "/oauth2/authorize",
+            "scopes" : {
+              "collector:commit" : "commit collector transaction"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "doca",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "doca": "@cloudflare/doca "
+  },
+  "dependencies": {
+    "@cloudflare/doca": "^0.1.3"
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "definitions": {
+    "identity": {
+      "email": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "phone": {
+        "type": "object",
+        "properties": {
+          "phonenumber": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "phonenumber"
+        ]
+      }
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "age": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "age"
+      ]
+    },
+    "communication": {
+      "deals": {
+        "email": {
+          "allOf": [
+            {
+              "properties": {
+                "newsletter:deals:email": {
+                  "title": "Special Deals",
+                  "type": "boolean"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "newsletter": {
+        "email": {
+          "allOf": [
+            {
+              "properties": {
+                "newsletter:channel:email": {
+                  "title": "Newsletter",
+                  "type": "boolean"
+                }
+              }
+            }
+          ]
+        },
+        "sms": {
+          "allOf": [
+            {
+              "properties": {
+                "newsletter:channel:sms": {
+                  "title": "Newsletter",
+                  "type": "boolean"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Profile Attributes.",
+      "$ref": "#/definitions/profile"
+    },
+    "channel": {
+      "type": "string",
+      "description": "Preferred Channel.",
+      "default": "email",
+      "enum": [
+        "email",
+        "sms"
+      ]
+    },
+    "identity": {
+      "anyOf": [
+        {
+          "properties": {
+            "channel": {
+              "type": "string",
+              "const":"email"
+              
+            },
+            "identity": {
+              "description": "Lookup account by email identifier",
+              "$ref": "#/definitions/identity/email"
+            }
+          }
+        },
+        {
+          "properties": {
+            "channel": {
+              "type": "string",
+              "const":"sms" 
+ 
+            },
+            "identity": {
+              "description": "Lookup account by phone identifier",
+              "$ref": "#/definitions/identity/phone"
+            }
+          }
+        }
+
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "channel": {
+              "type": "string",
+              "enum": [
+                "email"
+              ]
+            },
+            "identity": {
+              "description": "Lookup account by email identifier",
+              "$ref": "#/definitions/identity/email"
+            }
+          }
+        },
+        {
+          "properties": {
+            "channel": {
+              "type": "string",
+              "enum": [
+                "sms"
+              ]
+            },
+            "identity": {
+              "description": "Lookup account by phone identifier",
+              "$ref": "#/definitions/identity/phone"
+            }
+          }
+        } 
+        
+      ]
+    }
+  ]
+}

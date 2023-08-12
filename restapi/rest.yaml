@@ -1,3 +1,13 @@
+openapi: 3.1.0
+info:
+  title: Communication Preferences
+  version: '1.0'
+  x-logo:
+    url: ''
+servers:
+  - url: 'https://accounts.gigya.com'
+    description: ''
+    x-last-modified: 1633814282661
 paths:
   /users/{id}:
     parameters:

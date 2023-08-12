@@ -1,0 +1,605 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Communication Preferences",
+    "version": "1.0",
+    "x-logo": {
+      "url": ""
+    }
+  },
+  "servers": [
+    {
+      "url": "https://accounts.gigya.com",
+      "description": "",
+      "x-last-modified": 1633814282661
+    }
+  ],
+  "components": {
+    "schemas": {
+      "ConsentState" : {
+        "description": "The latest consent state known by the server or client, takes value of [accepted, rejected, unknown]",
+        "type": "string",
+        "enum": [
+          "rejected",
+          "accepted",
+          "unknown"
+        ],
+        "example": [
+          "rejected",
+          "accepted",
+          "unknown"
+        ]
+      },
+      "ConsentCheckRequest": {
+         
+        "type": "object",
+        "required" : ["consentInstanceId"],
+        "properties": {
+          "consentInstanceId": {
+            "type": "string",
+            "description": "Represents a unique id to the interaction",
+            "example": [
+              "newsletter"
+            ]
+          },
+          "consentStateValue": {
+            "description": "the stored consent state in client cache takes value of [accepted, rejected, unknown]",
+            "type": "string",
+            "example": [
+              "unknown"
+            ]
+          },
+          "consentString": {
+            "type": "string",
+            "description": "The stored consent string in client cache",
+            "example": [
+              "Base 64 string reverence to the TCF consent string"
+            ]
+          }
+        }
+        
+      },
+      "ConsentCheckResponse": {
+          
+        "type": "object",
+        "required" : ["consentInstanceId"],
+        "properties": {
+          "consentRequired": {
+            "description": "Whether consent is required from the user."
+          },
+          "consentInstanceId": {
+            "type": "string",
+            "description": "Represents a unique id to the interaction",
+            "example": [
+              "newsletter",
+              "special-offers"
+            ]
+          },
+          "consentStateValue": {
+            "$ref": "#/components/schemas/ConsentState", 
+            "type": "string", 
+            "description": "The latest consent state known by the server, takes value of [accepted, rejected, unknown]",
+           
+          },
+          "consentString": {
+            "type": "string",
+            "description": "The latest consent string known by the server, If the value is non-null, and if the consentStateValue is \"accepted\" or \"rejected\",the value will be cached at client.",
+            "example": [
+              "Base 64 string reverence to the TCF consent string"
+            ]
+          },
+          
+          "expireCache": {
+            "type": "boolean",
+            "description": "Indicate that the cache needs to be cleared, set to `true` in conjunction with consentStateValue='accepted'/'rejected' to enforce server side consent state"
+          }
+        }
+      },
+
+
+      "ErrorModel": {
+        "type": "object",
+        "required": [
+          "message",
+          "code"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 600
+          }
+        }
+      },
+      "ExtendedErrorModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ErrorModel"
+          },
+          {
+            "type": "object",
+            "required": [
+              "rootCause"
+            ],
+            "properties": {
+              "rootCause": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+
+  "paths": {
+    "/preferences/communication/": {
+      "summary": "Communication preferences draft request",
+      "description": "This API path is used to create a draft of a communication preferences request to show to the user. \n\n",
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "encoding": "",
+              "example": "",
+              "schema": {
+                "$ref": "#/components/schemas/Communication-Prefernces-Draft-Request"
+              }
+            }
+          },
+          "required": false,
+          "description": ""
+        },
+        "tags": [],
+        "operationId": "communication-preferences-draft",
+        "summary": "Used to create a draft of a communication preferences request to show to the user. "
+      },
+      "options": {
+        "tags": []
+      },
+      "x-last-modified": 1633814616609
+    },
+    "/preferences/communication/{interaction}": {
+      "summary": "This API is used to update the communication preferences given by the user.",
+      "put": {
+        "tags": []
+      },
+      "parameters": [
+        {
+          "deprecated": false,
+          "example": "newslater_0989823",
+          "name": "interaction",
+          "description": "corresponds to the specific interaction generated by subscription system in the POST request",
+          "in": "path",
+          "required": true,
+          "x-last-modified": 1633814825032
+        }
+      ],
+      "x-last-modified": 1633814702546
+    },
+    "/preferences/communication/check": {
+      "summary": "Communication preferences check status",
+      "description": "This API path is used to check a status of a communication preferences, intiate a new draft consent if not exists",
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "encoding": "",
+              "example": "",
+              "schema": {
+                "$ref": "#/components/schemas/Communication-Prefernces-Check-Request"
+              }
+            }
+          },
+          "required": false,
+          "description": ""
+        },
+        "tags": [],
+        "operationId": "communication-preferences-check",
+        "summary": "check a status of a communication preferences. "
+      },
+      "options": {
+        "tags": [],
+        "responses": {
+          "default": {
+            "$ref": ""
+          }
+        }
+      }
+    }},
+  "components": {
+    "schemas": {
+      
+    "Communication-Prefernces-Draft-Request": {
+      "type": "object",
+      "properties": {
+        "policy": {
+          "type": "string",
+          "descreption": "Represnts the communication policy URL to apply.",
+          "example": [
+            "communication/newsletter/subscribtion",
+            "communication/newsletter/signup-form",
+            "communication/special-offers"
+          ]
+        },
+        "consentData": {
+          "type": "object",
+          "properties": {
+            "consentInstanceId": {
+              "descreption": "Represents a unique id to the interaction",
+              "optional": true,
+              "type": "string",
+              "example": [
+                "newsletter"
+              ]
+            },
+            "consentStateValue": {
+              "descreption": "the stored consent state in client cache takes value of [accepted, rejected, unknown]",
+              "type": "string",
+              "example": [
+                "unknown"
+              ]
+            },
+            "consentString": {
+              "type": "string",
+              "descreption": "The stored consent string in client cache",
+              "example": [
+                "Base 64 string refernce to TCF"
+              ]
+            }
+          }
+        }
+      },
+      "example": {
+        "policy": "communication/newsletter/signup-form",
+        "consentData": {
+          "consentInstanceId": "newsletter",
+          "consentStateValue": "unknown",
+          "consentString": "Base 64 string refernce to TCF",
+          "matchedGeoGroup": "EU"
+        }
+      },
+      "x-last-modified": 1633818031504,
+      "required": []
+    },
+    "Communication-Draft-Response": {
+      "type": "object",
+      "example": {
+        "id": "newslatter",
+        "state": "draft",
+        "claims": {
+          "userinfo": {
+            "given_name": {
+              "essential": true
+            },
+            "nickname": null,
+            "email": {
+              "essential": true
+            },
+            "email_verified": {
+              "essential": true
+            },
+            "picture": null
+          },
+           
+              "purpose": "Contact",
+              "purposeCategory": [
+                "Legal"
+              ],
+              "consentType": "EXPLICIT",
+              "piiCategory": [
+                {
+                  "piiCategory": "email",
+                  "validity": "days:30"
+                },
+                {
+                  "piiCategory": "username",
+                  "validity": "days:30"
+                }
+              ],
+              "primaryPurpose": true,
+              "termination": "days:30",
+              "thirdPartyDisclosure": false,
+              "thirdPartyName": ""
+            }
+          ],
+          "prefernces": [
+            {
+              "frequancy.daily": {
+                "enabled": null
+              },
+              "intrests.pets": {
+                "enabled": null
+              },
+              "intrests.cars": {
+                "enabled": null
+              },
+              "channel.email": {
+                "enabled": null
+              },
+              "channel.sms": {
+                "enabled": null
+              }
+            }
+          ],
+          "id_token": {
+            "gender": null,
+            "birthdate": {
+              "essential": true
+            },
+            "acr": {
+              "values": [
+                "urn:mace:incommon:iap:silver"
+              ]
+            }
+          }
+        }
+      },
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": [
+            "newslatter"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "example": [
+            "draft"
+          ]
+        },
+        "claims": {
+          "type": "object",
+          "properties": {
+            "userinfo": {
+              "type": "object",
+              "properties": {
+                "given_name": {
+                  "type": "object",
+                  "properties": {
+                    "essential": {
+                      "type": "boolean",
+                      "example": [
+                        true
+                      ]
+                    }
+                  }
+                },
+                "nickname": {
+                  "type": "string",
+                  "example": [
+                    null
+                  ]
+                },
+                "email": {
+                  "type": "object",
+                  "properties": {
+                    "essential": {
+                      "type": "boolean",
+                      "example": [
+                        true
+                      ]
+                    }
+                  }
+                },
+                "email_verified": {
+                  "type": "object",
+                  "properties": {
+                    "essential": {
+                      "type": "boolean",
+                      "example": [
+                        true
+                      ]
+                    }
+                  }
+                },
+                "picture": {
+                  "type": "string",
+                  "example": [
+                    null
+                  ]
+                }
+              }
+            },
+            "purpuses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "purpose": {
+                    "type": "string",
+                    "example": [
+                      "Contact"
+                    ]
+                  },
+                  "purposeCategory": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": [
+                        "Legal"
+                      ]
+                    }
+                  },
+                  "consentType": {
+                    "type": "string",
+                    "example": [
+                      "EXPLICIT"
+                    ]
+                  },
+                  "piiCategory": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "piiCategory": {
+                          "type": "string",
+                          "example": [
+                            "email"
+                          ]
+                        },
+                        "validity": {
+                          "type": "string",
+                          "example": [
+                            "days:30"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "primaryPurpose": {
+                    "type": "boolean",
+                    "example": [
+                      true
+                    ]
+                  },
+                  "termination": {
+                    "type": "string",
+                    "example": [
+                      "days:30"
+                    ]
+                  },
+                  "thirdPartyDisclosure": {
+                    "type": "boolean",
+                    "example": [
+                      false
+                    ]
+                  },
+                  "thirdPartyName": {
+                    "type": "string",
+                    "example": [
+                      ""
+                    ]
+                  }
+                }
+              }
+            },
+            "prefernces": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "frequancy.daily": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "string",
+                        "example": [
+                          null
+                        ]
+                      }
+                    }
+                  },
+                  "intrests.pets": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "string",
+                        "example": [
+                          null
+                        ]
+                      }
+                    }
+                  },
+                  "intrests.cars": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "string",
+                        "example": [
+                          null
+                        ]
+                      }
+                    }
+                  },
+                  "channel.email": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "string",
+                        "example": [
+                          null
+                        ]
+                      }
+                    }
+                  },
+                  "channel.sms": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "string",
+                        "example": [
+                          null
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "id_token": {
+              "type": "object",
+              "properties": {
+                "gender": {
+                  "type": "string",
+                  "example": [
+                    null
+                  ]
+                },
+                "birthdate": {
+                  "type": "object",
+                  "properties": {
+                    "essential": {
+                      "type": "boolean",
+                      "example": [
+                        true
+                      ]
+                    }
+                  }
+                },
+                "acr": {
+                  "type": "object",
+                  "properties": {
+                    "values": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": [
+                          "urn:mace:incommon:iap:silver"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "x-last-modified": 1633819692883
+    }
+  },
+
+  "securitySchemes": {
+    "JWTAuth": {
+      "scheme": "bearer",
+      "bearerFormat": "JWT",
+      "type": "http",
+      "description": "Example: \n> Authorization: Bearer <token>",
+      "x-last-modified": 1633814301086
+    }
+  },
+  "headers": {},
+  "responses": {},
+  "parameters": {}
+},
+"security": [
+{
+"JWTAuth": []
+}
+],
+"tags": []
+}
